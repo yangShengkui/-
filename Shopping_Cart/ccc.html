@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<style type="text/css">
+
+    /* 广告 */
+    .advertise {
+        position: relative;
+        width: 3225px;
+        height:540px;
+        overflow:hidden;
+        font-size: 110px;
+        font-family: "YouYuan";
+    }
+    .scroll_div {
+        position: absolute;
+        top: 235px;
+        left: 500px;
+        width:2452px;
+        white-space: nowrap;
+        overflow:hidden;
+    }
+    .advertise ,.scroll_div , .scroll_begin ,.scroll_end {display: inline-block}
+</style>
+<body>
+
+
+
+<!-- 通知小广告 -->
+<div id="gongao" class="advertise">
+    <div id="scroll_div" class="scroll_div">
+        <div id="scroll_begin" class="scroll_begin">
+            你好你好你好你好好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好
+        </div>
+        <div id="scroll_end" class="scroll_end"></div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+
+
+</script>
+<script type="text/javascript">
+    //文字滚动
+    function ScrollImgLeft(){
+
+        var speed=2;
+        var scroll_begin = document.getElementById("scroll_begin");
+        var scroll_end = document.getElementById("scroll_end");
+        var scroll_div = document.getElementById("scroll_div");
+
+        scroll_end.innerHTML=scroll_begin.innerHTML;
+        function Marquee(){
+
+
+
+            if(scroll_end.offsetWidth-scroll_div.scrollLeft<=0){
+
+                alert(  scroll_end.offsetWidth);
+                alert(scroll_div.scrollLeft);
+                alert(scroll_begin.offsetWidth);
+                scroll_div.scrollLeft-=scroll_begin.offsetWidth;
+            }else{
+                scroll_div.scrollLeft++;
+            }
+
+        }
+        var MyMar=setInterval(Marquee,speed);
+        scroll_div.onmouseover=function() {clearInterval(MyMar);}
+        scroll_div.onmouseout=function() {MyMar=setInterval(Marquee,speed);}
+    }
+
+    ScrollImgLeft();
+</script>
+</html>

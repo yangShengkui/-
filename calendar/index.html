@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>时间插件</title>
+<meta charset="utf-8">
+<meta name="pragma" content="no-cache">
+<meta name="cache-control" content="no-cache">
+<meta name="expires" content="0">
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="This is my page">
+
+
+<link href="css/Ecalendar.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<style type="text/css">
+
+
+
+</style>
+
+
+<body>
+
+
+
+
+<label>选择日期:</label>
+<input type="text" name="date"  id="datetime" value=""/>
+	
+
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+	<script src="js/Ecalendar.jquery.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	//时间插件
+var newDate = new Date();
+newDate.setDate(newDate.getDate());//加一天
+var t = newDate.toJSON(); 
+var format = t.substr(0,10);
+$(function(){
+	$("#datetime").ECalendar({
+		 type:"date",   //模式，time: 带时间选择; date: 不带时间选择;
+		 stamp : false,   //是否转成时间戳，默认true;
+		 offset:[0,2],   //弹框手动偏移量;
+		 format:"yyyy-mm-dd",   //时间格式 默认 yyyy-mm-dd hh:ii;
+		 skin:3,   //皮肤颜色，默认随机，可选值：0-8,或者直接标注颜色值;
+		 step:10,   //选择时间分钟的精确度;
+		 callback:function(v,e){},//回调函数
+		 disabled : 0, //0为当天之前的不能选，正数为当天到+输入值的禁选,负数则反，100无限制;
+	});
+});
+    
+if( $("#datetime").val() == ''){
+	 $("#datetime").val(format);
+}
+	
+	</script>
+	
+	
+</body>
+</html>

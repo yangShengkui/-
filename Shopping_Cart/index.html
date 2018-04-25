@@ -1,0 +1,962 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>jQuery实现加入购物车飞入动画效果</title> 
+<style type="text/css">
+/* CSS初始化 */
+body,p,div,h1,h2,h3,h4,h5,h6,ul,dl,ol,dt,dd,li,a,span,button,label {
+	font-family: "黑体";
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+}
+input,img,button {
+	border: 0 none;
+	outline-style: none;
+	margin: 0;
+	padding: 0;
+	outline:none;
+}
+input,select,option,textarea:focus {
+	outline:none;
+}
+a:focus{
+	border: 0 none;
+	outline:none;
+}
+input:focus{
+	outline:none;
+}
+.focus {
+	border-color: transparent !important;
+}
+/* 主体 */
+body,span {
+	font-family: "YouYuan";
+}
+.content {
+	width: 100%;
+	height: 100%;
+}
+.content_form {
+	width: 100%;
+}
+/* 头部 */
+.content_header {
+	position: fixed;
+	top: 0rem;
+	left: 0rem;
+	z-index: 2222;
+	width: 100%;
+	height: 2rem;
+	line-height: 2rem;
+	text-align: center;
+	background-color: #2c2d45;
+}
+.content_body {
+	margin-top: 2rem;
+}
+.a_back {
+	position: fixed;
+	top: 0.4rem;
+	left: 1.5rem;
+	background: url("/statics/img/phd/Arrow_Back.png")  no-repeat;
+	width: 1.4rem;
+	height: 1.4rem;
+	background-size: 1.4rem 1.4rem;
+}
+.content_h {
+	font-size: 0.8rem;
+	color: #ffffff;
+}
+
+/* 左侧导航 */
+.content_aside {
+	position: fixed;
+	top: 2rem;
+	left: 0rem;
+	width: 4.8rem;
+}
+.content_aside ul {
+	width: 100%;
+}
+.content_aside ul li {
+	position: relative;
+	width: 100%;
+	height: 2.5rem;
+	line-height: 2.5rem;
+	text-align: center;
+	border-bottom: 0.05rem solid #ccc;
+	box-shadow: 0rem 0.003rem 0.0rem #333;
+}
+.a_line {
+	position: absolute;
+	top: 0.1rem;
+	left:0.2rem;
+	width: 0.15rem;
+	height: 2.2rem;
+	background-color: #0599e9;
+}
+.d-span {
+	font-size: 0.8rem;
+} 
+
+/* 右侧图片 */
+.content_img {
+	float: right;
+}
+.content_img ul {
+	width: 10rem;
+	height: 100%;
+}
+.content_img ul li {
+	position: relative;
+	float: left;
+	width: 4.85rem;
+	height: 6.4rem;
+	margin-right: 0.15rem;
+	margin-bottom: 0.4rem;
+}
+.i_img {
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	background: url("/statics/img/Meal_Reserve/cl_back.png") no-repeat;
+	width: 4.85rem;
+	height: 6.4rem;
+	background-size: 4.85rem 6.4rem;
+}
+
+/* 特餐 */
+.content_details {
+	display: none;
+	float: right;
+	margin-bottom: 1.82rem;
+}
+.content_details ul {
+	width: 10rem;
+}
+.content_details ul li {
+	padding: 0.4rem 0rem;
+	width: 100%;
+	height: 4.4rem;
+	border-bottom: 0.05rem solid #ccc;
+	box-shadow: 0rem 0.003rem 0.0rem #333;
+}
+/* 背景图 */
+.food_img {
+	float: left;
+	width: 3rem;
+	height: 3.4rem;
+	margin-left: 0.2rem;
+	position: relative;
+}
+.food_i {
+	position: absolute;
+	top: 0rem;
+	left: 0rem;
+	border-radius: 0.2rem;
+	background: url("/statics/img/Meal_Reserve/cl_back.png") no-repeat;
+	width: 3rem;
+	height: 3.4rem;
+	background-size: 3rem 3.4rem; 
+}
+/* 描述 */
+.food_describe {
+	float: right;
+	margin-right: 0.2rem;
+}
+.desc_titie {
+	font-size: 0.8rem;
+	margin-bottom: 0.4rem; 
+}
+.desc_p {
+	font-size: 0.42rem;
+	margin-bottom: 0.45rem;
+	color: #ccc;
+}
+.desc_info {
+	position: relative;
+}
+.desc_span {
+	font-size: 0.6rem;
+	color: #f30739;
+}
+.desc_add {
+	position: absolute;
+	top: 0rem;
+	right: 0.3rem;
+	background: url("/statics/img/phd/add.png") no-repeat;
+	width: 1rem;
+	height: 1rem;
+	background-size: 1rem 1rem;
+	
+}
+
+/* 尾部 */
+.content_foot {
+	position: fixed;
+	left: 0rem;
+	bottom: 0rem;
+	z-index: 2222;
+	width: 100%;
+	height: 2rem;
+}
+/* 购物车 */
+.left_cart {
+	position: relative;
+	float: left;
+	width: 60%;
+	height: 2rem;
+	background-color: #747a89;
+}
+.cart_back {
+	position: relative;
+	width: 2.1rem;
+	height: 2.1rem;
+	display: inline-block;
+	margin-top: -0.7rem;
+	margin-left: 1rem;
+	border-radius: 50%;
+	background-color: #92959b;
+}
+.cart_img {
+	position: absolute;
+	top: 0.6rem;
+	left: 0.5rem;
+	background: url("/statics/img/phd/cart_img.png") no-repeat;
+	width: 2rem;
+	height: 2rem;
+	background-size: 1rem 1rem;
+}
+.cart_sa {
+	position: absolute;
+	top: 0.05rem;
+	left: 4rem;
+	font-size: 0.65rem;
+	color: #ffffff;
+	
+} 
+.cart_sb {
+	position: absolute;
+	top: 0.05rem;
+	left: 4.7rem;
+	font-size: 0.65rem;
+	color: #ffffff;
+}
+.cart_sc {
+	position: absolute;
+	top: 1rem;
+	left: 4rem;
+	font-size: 0.5rem;
+	color: #ffffff;
+}
+/* 结算 */
+.right_pay {
+	float: right;
+	text-align: center;	
+	width: 40%;
+	height: 2rem;
+	line-height: 2rem;
+	background-color: #92959b;
+}
+.pay_sa {
+	width: 100%;
+	text-decoration: none;
+	font-size: 0.8rem;
+	background-color: #92959b;
+	color: #ffffff;
+}
+.pay_sa:link {
+	font-size: 0.8rem;
+	color: #ffffff ;
+	text-decoration: none;
+}
+.pay_sa:visited {
+	font-size: 0.8rem;
+	color: #ffffff ;
+	text-decoration: none;
+}
+/* 模态框部分 */
+.content_top {
+	width: 100%;
+	height: 8.8rem;
+}
+.cont_modal {
+	overflow: hidden;
+}
+/* 已选商品 */
+.shop_selected {
+	position: relative;
+	height: 2rem;
+	line-height: 2rem;
+	width: 100%;
+	background-color: #f5f5f5;
+}
+.b_line {
+	position: absolute;
+	top: 0.25rem;
+	left:0.35rem;
+	width: 0.2rem;
+	height: 1.5rem;
+	background-color: #0599e9;
+}
+.sele_sp {
+	font-size: 0.6rem;
+	font-weight: 700;
+	margin-left: 1rem;
+	margin-right: 9.6rem;
+}
+.delete_img {
+	position: absolute;
+	top: 0.65rem;
+	left: 12rem;
+	background: url("/statics/img/phd/delete_img.png") no-repeat;
+	width: 0.7rem;
+	height: 0.7rem;
+	background-size: 0.7rem 0.7rem;
+}
+.sele_sd {
+	font-size: 0.6rem;
+	font-weight: 700;
+	
+}
+.food_list {
+	width: 100%;
+	height: 10.94rem;
+	background-color: #ffffff;
+}
+.food_list ul {
+	width: 100%;
+	height: 100%;
+	overflow: scroll;
+}
+.food_list ul li {
+	float: left;
+	width: 100%;
+	height: 2rem;
+	line-height: 2rem;
+	border-bottom: 0.03rem solid #ccc;
+} 
+.list_left {
+	float: left;
+}
+.list_name {
+	font-size: 0.7rem;
+	margin-left: 0.9rem;
+	margin-right: 3.8rem;
+}
+.list_price {
+	font-size: 0.65rem;
+	color: #e95304;
+}
+.list_prices{
+	font-size: 0.65rem;
+	color: #e95304;
+}
+.list_right {
+	float: right;
+	position: relative;
+}
+.list_count {
+	position: absolute;
+	top: 0.68rem;
+	left: 1.15rem;
+	width: 1.3rem;
+	height: 0.7rem;
+	line-height: 0.7rem;
+	text-align: center;
+	font-size: 0.65rem;
+} 
+
+/* 圆形加减按钮 */
+.list_reduce {
+	position: relative;
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+	border: 0.05rem solid #ccc;
+	border-radius: 50%;
+	background-color: #ffffff;
+}
+.reduce {
+	position: absolute;
+	top: 0.18rem;
+	right: 0.18rem;
+	background: url("/statics/img/phd/reduce.png") no-repeat;
+	width: 0.6rem;
+	height: 0.6rem;
+	background-size: 0.6rem 0.6rem;
+}
+.list_add {
+	position: relative;
+	display: inline-block;
+	width: 1rem;
+	height: 1rem;
+	margin-right: 1.5rem;
+	margin-top: 0.5rem;
+	margin-left: 1.5rem;
+	border-radius: 50%;
+	background-color: #0599e9;
+}
+.add {
+	position: absolute;
+	top: 0.2rem;
+	right: 0.2rem;
+	background: url("/statics/img/phd/add1.png") no-repeat;
+	width: 0.6rem;
+	height: 0.6rem;
+	background-size: 0.6rem 0.6rem;
+}
+
+.a_blue {
+	background-color: #0599e9;
+}
+.cart_count {
+	display: none;
+	position: absolute;
+	top: -0.82rem;
+	left: 2.45rem;
+	width: 1rem;
+	height: 1rem;
+	line-height: 1rem;
+	text-align: center;
+	border: 0.05rem solid #ffffff;
+	border-radius: 50%;
+	color: #ffffff;
+	background-color: #fa0606; 
+}
+.cart_sd {
+	position: absolute;
+	top: 0.35rem; 
+	left: 2.8rem; 
+	opacity: 0; 
+	font-size: 0.6rem;
+}
+.cart_sQ {
+	font-size: 0.6rem;
+}
+.li_back {
+	background-color: #ccc;
+}
+.open1 {
+	display: block;
+}
+.open2 {
+	display: none;
+}
+.open3 {
+	display: none;
+}
+
+</style>
+<script type="text/javascript" src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="jquery.fly.min.js"></script>
+<!--[if lte IE 9]>
+<script src="requestAnimationFrame.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+
+<!--主体-->
+     <div class="content">
+        <form class="content_form ">
+            <!-- 头部 -->
+            <div class="content_header">
+                <a href="javascript:;" class="a_back"></a>
+                <span class="content_h">特餐</span>
+            </div>
+           <!--  身体 -->
+            <div class="content_body clearfix">
+               <!--  左边导航栏 -->
+                <div class="content_aside">
+                    <ul>
+                    	<li class="li_back">
+                    		<i class="a_line"></i>
+                    		<span class="d-span">早餐</span>
+                    	</li>
+                    	<li>
+                    		<i class=""></i>
+                    		<span class="d-span">午餐</span>
+                    	</li>
+                    	<li>
+                    		<i class=""></i>
+                    		<span class="d-span">晚餐</span>
+                    	</li>
+                    </ul>
+                </div>
+                <!-- 右边详情展示早餐 -->
+                <div class="content_details open1">
+                    <ul>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName1">餐品1</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney1">10</span>
+                    		    	<span class="desc_add" id="Add1"></span> 
+                    		    	<span class="cart_sd" id="hideCount1">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName2">餐品2</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney2">9</span>
+                    		    	<span class="desc_add" id="Add2"></span>
+                    		    	<span class="cart_sd" id="hideCount2">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName3">餐品3</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info" >
+                    		    	<span class="desc_span" id="singleMoney3">72</span>
+                    		    	<span class="desc_add" id="Add3"></span>
+                    		    	<span class="cart_sd" id="hideCount3">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName4">餐品4</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney4">26</span>
+                    		    	<span class="desc_add" id="Add4"></span>
+                    		    	<span class="cart_sd" id="hideCount4">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName5">餐品5</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info" >
+                    		    	<span class="desc_span" id="singleMoney5">9</span>
+                    		    	<span class="desc_add" id="Add5"></span>
+                    		    	<span class="cart_sd" id="hideCount5">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName6">餐品6</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney6">43</span>
+                    		    	<span class="desc_add" id="Add6"></span>
+                    		    	<span class="cart_sd" id="hideCount6">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    </ul>
+                </div>
+                <!-- 右边详情展示午餐 -->
+                <div class="content_details open2">
+                    <ul>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName7">餐品7</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney7">10</span>
+                    		    	<span class="desc_add" id="Add7"></span>
+                    		    	<span class="cart_sd" id="hideCount7">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName8">餐品8</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney8">9</span>
+                    		    	<span class="desc_add" id="Add8"></span>
+                    		    	<span class="cart_sd" id="hideCount8">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName9">餐品9</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info" >
+                    		    	<span class="desc_span" id="singleMoney9">72</span>
+                    		    	<span class="desc_add" id="Add9"></span>
+                    		    	<span class="cart_sd" id="hideCount9">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    </ul>
+                </div>
+                <!-- 右边详情展示晚餐 -->
+                <div class="content_details open3">
+                    <ul>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName10">餐品10</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info">
+                    		    	<span class="desc_span" id="singleMoney10">10</span>
+                    		    	<span class="desc_add" id="Add10"></span>
+                    		    	<span class="cart_sd"  id="hideCount10">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	<li>
+                    		<div class="food_img">
+                    			<i class="food_i"></i>
+                    		</div>
+                    		<div class="food_describe">
+                    			<h5 class="desc_titie" id="DishName11">餐品11</h5>
+                    			<p class="desc_p">采用新鲜玉米粒熬制而成，粒粒饱</p>
+                    		    <div class="desc_info" >
+                    		    	<span class="desc_span" id="singleMoney11">9</span>
+                    		    	<span class="desc_add" id="Add11"></span>
+                    		    	<span class="cart_sd" id="hideCount11">0</span>
+                    		    </div>
+                    		</div>
+                    	</li>
+                    	
+                    </ul>
+                </div>
+            </div>
+            <!-- 尾部 -->
+            <div class="content_foot">
+            	<a class="left_cart" href="#Layer" data-toggle="modal">
+            		<!-- 购物车 -->
+            		<span class="cart_back"><i class="cart_img"></i></span>
+            		<!-- 红色小圆 -->
+            		<div class="cart_count">
+            			<span class="cart_sQ" id="All_count">0</span>
+            		</div>
+            		<span class="cart_sa">¥</span>
+            		<span class="cart_sb">0.00</span>
+            		<span class="cart_sc">最低消费20</span>
+            	</a>
+            	<div class="right_pay">
+            		<button class="pay_sa">结算</button>
+            	</div>
+            </div>
+        </form>
+    </div>
+    
+    
+    <!--   模态框 -->
+	<div id="Layer" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" >
+		<!-- 身体 -->
+		<div class="content_body cont_modal" >
+			<!-- 透明部分 -->
+			<div class="content_top" data-dismiss="modal">
+				<div></div>
+			</div>
+			<!-- 已选商品 -->
+			<div class="content_middle">
+				<div class="shop_selected">
+					<i class="b_line"></i>
+					<span class="sele_sp">已选商品</span>
+					<i class="delete_img"></i>
+					<span class="sele_sd">清空</span>
+				</div>
+				<div class="food_list">
+					<ul>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div> 
+	
+	<!-- 结算页面 -->
+	<div id="pay_ment" style="display: none; text-align: center;font-size: 1rem; width: 6rem; height: 10rem; position: fixed; top: 3rem; left: 5rem; z-index: 7; background-color:#ffffff; opacity: 0.1;">
+		<span>请扫码</span>
+	</div>
+</body>
+</html>
+
+<script>
+//屏幕适配
+	   var html = document.documentElement;
+	    html.style.fontSize = html.clientWidth / 15 + 'px';
+	    
+	    //点击购物车按钮添加背景色
+	    $(".cart_back").click(function () {
+	    	$(".pay_sa").addClass("a_blue");
+	    	$(".cart_back").addClass("a_blue");
+	    });
+	    
+	   
+	    //侧边栏选中状态
+	    $(".content_aside ul li").click(function () {
+	    	$(".content_aside ul li").removeClass("li_back");
+	    	$(".content_aside ul li").children("i").removeClass("a_line");
+	    	$(this).addClass("li_back");
+	    	$(this).children("i").addClass("a_line");
+	    	var mealName = $(this).children("span").text();
+	    	if(mealName == "早餐"){
+	    		$(".open1").css("display","block");
+	    		$(".open2").css("display","none");
+	    		$(".open3").css("display","none");
+	    	}else if(mealName == "午餐"){
+	    		$(".open1").css("display","none");
+	    		$(".open2").css("display","block");
+	    		$(".open3").css("display","none");
+	    	}else{
+	    		$(".open1").css("display","none");
+	    		$(".open2").css("display","none");
+	    		$(".open3").css("display","block");
+	    	} 
+	    });
+	    
+	   
+	    //添加餐品到购物车
+	    $(".desc_add").click(function(event){
+	    	
+	    	//飞入购物车
+	    	var offset = $(".cart_count").offset();  //结束的地方的元素
+    		var id = $(this).attr('id').substring(3);
+    		var flyer = $('<span class="desc_add" id="Add'+id+'"></span>');
+	    	var nScrollTop = $(document).scrollTop();//获取滚动条距离顶部的高度
+	    	event.pageY = parseInt(event.pageY) - parseInt(nScrollTop);
+    		offset.left = 160.0625;
+    		offset.top = 1496.78125;
+    		if(offset.top>1626.78125){
+				offset.top = 1626.78125;
+			}
+    		flyer.fly({
+    			start: {
+    				left: event.pageX,
+    				top: event.pageY
+    			},
+    			end: {
+    				left: offset.left,
+    				top: offset.top,
+    				width: 20,
+    				height: 20
+    			},
+    			onEnd: function(){
+    				$(this).unbind('click');
+    				this.destory();
+    			},
+    			
+    		});
+	        //背景色
+	    	$(".pay_sa").removeClass("a_blue");
+	    	$(".cart_back").removeClass("a_blue");
+	    	
+	    	//显示购物车数量小红点 
+	    	$(".cart_count").css("display","block");
+	    	var goodName = $(this).parent().prev().prev().text();
+	    	var index = $(this).parent().prev().prev().attr("id").replace("DishName",""); 
+	    	var cartname = $("#list_name"+index).text();
+	    	
+	    	var SingleMoney = $(this).prev().text();
+	    	var SingleCount = $(this).next().text();
+	    	SingleCount++;
+	    	$("#hideCount"+index).text(SingleCount);
+	    	var SingleAllMoney = SingleMoney*SingleCount;
+	    	
+	    	if(cartname == ''){
+	    		var Addproduct = $(
+		       			
+						'<li>'+
+							'<div class="list_left">'+
+								'<span class="list_name" id="list_name'+index+'">'+ goodName +'</span>'+
+								'<span class="list_prices">¥</span>'+
+								'<span class="list_price" id="list_price'+index+'">' + SingleAllMoney +'</span>'+
+							'</div>'+
+							'<div class="list_right">'+
+								'<span class="list_reduce list_public" id="good_reduce'+index+'"><i class="reduce"></i></span>'+
+								'<span class="list_count" id="good_count'+index+'">' + SingleCount +'</span>'+
+								'<span class="list_add list_public" id="good_add'+index+'"><i class="add"></i></span>'+
+							'</div>'+
+						'</li>'
+					);
+				$(".food_list ul").eq(0).append(Addproduct);
+				
+	    	}else if(cartname != ''){
+	    		
+	    		$("#list_price"+index).text((SingleCount*SingleMoney));  
+	    		$("#good_count"+index).text(SingleCount);
+	    		
+	    	};
+	    	
+	    	//购物车数量总数
+	    	var TotalCount = $("#All_count").text();
+	    	TotalCount++;
+	    	$("#All_count").text(TotalCount);
+	    	
+	    	AllMoneyAdd(SingleMoney);
+	    	
+	    	
+	    	//添加商品购物车和和结算高亮背景
+	    	$(".cart_back").addClass("a_blue");
+	    	var money = $(".cart_sb").text();
+			 if(money >= 20 ){
+				 $(".pay_sa").addClass("a_blue");
+			 };
+	    }); 
+	    
+	    
+
+    	//购物车总金额加法
+    	function AllMoneyAdd(SingleMoney) {
+    		var CartMoney = $(".cart_sb").text();
+    		var CartAllMoney =  parseInt(SingleMoney) + parseInt(CartMoney); 
+    		$(".cart_sb").text((CartAllMoney));
+    	} 
+    	
+    	//购物车总金额减法
+    	function AllMoneyReduce(SingleMoney) {
+    		var CartMoney = $(".cart_sb").text();
+    		var CartAllMoney =  parseInt(CartMoney) - parseInt(SingleMoney); 
+    		$(".cart_sb").text((CartAllMoney));
+    	} 
+    	
+	    
+	    //购物车加减号
+	    $(".food_list ul").delegate("li .list_right .list_public", "click", function () {
+	    	
+	    	//判断点击时加减号然后更改购物车
+	    	var index = $(this).parent().prev().children().attr("id").replace("list_name","");
+	    	var All = $(this).parent().prev().children(".list_price").text();
+	    	
+	    	var class_name = $(this).children().attr("class");
+	    	
+	    	//减号
+	    	if( class_name == 'reduce'){
+	    		var str = $(this).next().text();
+		    	var reduce_count = str.substring(str.length-3);
+		    	var SingleMoney = (All/reduce_count);
+		    	
+		    	//在结算页面点击减号购物车时时变化
+		    	var AllreduceCount = $("#All_count").text();
+		    	AllreduceCount--;
+				if(AllreduceCount == -1){
+		    		return false;
+		    	}
+				
+		    	$("#All_count").text(AllreduceCount);
+		    	reduce_count--;
+		    	$(this).next().text(reduce_count);
+		    	$("#hideCount"+index).text(reduce_count);
+		    	//购物车单件商品总价
+		    	var OneAllMoney = (SingleMoney*reduce_count);
+		    	$(this).parent().prev().children(".list_price").text(OneAllMoney);
+		    	var All = $(this).parent().prev().children(".list_price").text();
+		    	//购物车总金额减法
+		    	AllMoneyReduce(SingleMoney);
+		    	
+		    	//当数量等于0删除该商品
+				if(reduce_count == 0){
+					$(this).parent().parent().remove();
+					
+					//清空当前的个数
+					
+					var money = $(".cart_sb").text();
+					if(money<20){
+						 $(".pay_sa").removeClass("a_blue");
+					}
+		    		return false;
+		    	}
+				
+		    	
+		    //加号	
+	    	}else if(class_name == 'add'){
+	    		var str = $(this).prev().text(); 
+		    	var add_count = str.substring(str.length-3);
+		    	var SingleMoney = (All/add_count);
+		    	add_count++;
+		    	$(this).prev().text(add_count);
+		    	
+	    		//在结算页面点击减号购物车时时变化
+		    	var AllAddCount = $("#All_count").text();
+		    	AllAddCount++;
+		    	$("#hideCount"+index).text(AllAddCount);
+		    	$("#All_count").text(AllAddCount);
+		    	//购物车单件商品总价
+		    	var OneAllMoney = (SingleMoney*add_count);
+		    	$(this).parent().prev().children(".list_price").text(OneAllMoney);
+		    	
+		    	//购物车总金额加法
+		    	AllMoneyAdd(SingleMoney);
+	    	}
+	    	
+	    	$(".pay_sa").removeClass("a_blue");
+	    	var money = $(".cart_sb").text();
+			 if(money < 20 ){
+				 $(".pay_sa").removeClass("a_blue");
+			 }else{
+				 $(".pay_sa").addClass("a_blue");
+			 }; 
+	    });
+	    
+	    
+	  //点击返回按钮
+	  $(".a_back").click(function () {
+		  window.location.href="/code/UI/Special_Meal.jsp";
+	  });  
+	  
+	 //清空购物车
+	 $(".sele_sd").click(function () {
+		  $(".food_list ul li").remove();
+		  $(".cart_sd").text("0");
+		  $("#All_count").text("0");
+		  $(".cart_sb").text("0.00");
+	 }); 
+	 
+	 //点击结算
+	 $(".pay_sa").click(function () {
+		 var money = $(".cart_sb").text();
+		 if(money < 20 ){
+			alert("对不起，您的消费总额没有达到20元，不能结算...");
+			return false;
+		 }else{
+			 
+			 $("#pay_ment").css("display","block");
+			 alert("付款成功...");
+			 return false;
+		 };
+		 
+	 }); 
+</script>

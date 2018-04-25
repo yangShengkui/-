@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>时间插件</title>
+<meta charset="utf-8">
+<meta name="pragma" content="no-cache">
+<meta name="cache-control" content="no-cache">
+<meta name="expires" content="0">
+<meta name="keywords" content="keyword1,keyword2,keyword3">
+<meta name="description" content="This is my page">
+
+
+<link href="css/Ecalendar.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<style type="text/css">
+
+
+
+</style>
+
+
+<body>
+
+
+	<label>开始时间:</label>
+	<input type="text" class="" id="datetime" name="datetime"  value="" readonly/>
+	<label>结束时间:</label>
+	<input type="text" class="" id="datetime2" name="datetime2"  value="" readonly/>
+
+
+
+	
+
+
+    <script src="js/jquery.min.js" type="text/javascript"></script>
+	<script src="js/Ecalendar.jquery.js" type="text/javascript"></script>
+	<script type="text/javascript">
+	//清除开始日期
+	$("#datetime").click(function () {
+		disableds = false;
+	});
+
+	//时间插件
+	var newDate = new Date();
+	var nowtime = newDate.toJSON(); 
+	var format = nowtime.substr(0,10);
+	
+	
+	$(function(){
+		//自动执行第二个日期插件
+		datetime2(format.split("-"));
+		$("#datetime").ECalendar({
+			 type:"date",   //模式，time: 带时间选择; date: 不带时间选择;
+			 stamp : false,   //是否转成时间戳，默认true;
+			 offset:[0,2],   //弹框手动偏移量;
+			 format:"yyyy-mm-dd",   //时间格式 默认 yyyy-mm-dd hh:ii;
+			 skin:3,   //皮肤颜色，默认随机，可选值：0-8,或者直接标注颜色值;
+			 step:10,   //选择时间分钟的精确度;
+			 callback:function(v,e){//回调函数
+				 v = v.split("-");
+			 	 v[0]= Number(v[0]);v[1]= Number(v[1]);v[2]= Number(v[2]);
+			 	 datetime2(v);
+			 }, 
+			 disableds : false //[2017,8,30]禁选传入的日期之前的日期，false无限制;
+		});
+		
+	}); 
+	
+	
+	function datetime2(datetime){
+		
+		$("#datetime2").ECalendar({
+			 type:"date",   //模式，time: 带时间选择; date: 不带时间选择;
+			 stamp : false,   //是否转成时间戳，默认true;
+			 offset:[0,2],   //弹框手动偏移量;
+			 format:"yyyy-mm-dd",   //时间格式 默认 yyyy-mm-dd hh:ii;
+			 skin:3,   //皮肤颜色，默认随机，可选值：0-8,或者直接标注颜色值;
+			 step:10,   //选择时间分钟的精确度;
+			 callback:function(v,e){//回调函数  
+
+				 //点击选中的日期关闭日历框
+				 $(".day li").click(function (){
+					 $(".ECalendarBox").hide();
+				 });
+				 
+			 }, 
+			 disableds : datetime //[2017,8,30]禁选传入的日期之前的日期，false无限制; 
+		});
+		
+	}
+	
+	
+	$("#datetime").click(function () {
+		$(this).blur();
+	});
+	$("#datetime2").click(function () {
+		$(this).blur();
+	});
+	
+	</script>
+	
+	
+</body>
+</html>
